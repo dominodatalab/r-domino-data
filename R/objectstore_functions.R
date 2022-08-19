@@ -15,22 +15,45 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#' Query a datasource and returns an arrow Table
+#' List the keys starting with prefix in an object store
 #'
 #' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
-#' @param query The query to run against the provided datasource
+#' @param prefix Prefix to filter keys to list
 #' @param override An environment with configuration overrides
 #'
-#' @return An [arrow::Table]
+#' @return A vector or string keys
 #' @export
-query <- function(client, datasource, query, override = new.env()) {
+list_keys <- function(client, datasource, prefix = "", override = new.env()) {
   datasource <- client$get_datasource(datasource)
-  result <- client$execute(
+  client$list_keys(
     datasource$identifier,
-    query,
+    prefix,
     reticulate::dict(),
     reticulate::dict()
   )
-  result$reader$to_reader()$read_table()
+}
+
+#' Retrieve an object from a datasource
+#'
+#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param datasource The name of the datasource to query
+#' @param object The object to retrieve
+#' @param override An environment with configuration overrides
+#' @param as Passed through to \code{httr::content}
+#'
+#' @return Raw vector representation of the object
+#' @export
+get_object <- function(client, datasource, object, override = new.env(), as = "raw") {
+  datasource <- client$get_datasource(datasource)
+  url <- client$get_key_url(
+    datasource$identifier,
+    object,
+    FALSE,
+    reticulate::dict(),
+    reticulate::dict()
+  )
+  # TODO Headers for generic s3 and ADLS
+  r <- httr::GET(url)
+  httr::content(r, as = as)
 }

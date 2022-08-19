@@ -15,22 +15,17 @@
 # specific language governing permissions and limitations
 # under the License.
 
-#' Query a datasource and returns an arrow Table
+#' Create a client to Domino datasources
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
-#' @param datasource The name of the datasource to query
-#' @param query The query to run against the provided datasource
-#' @param override An environment with configuration overrides
+#' @param api_key string key to override the environment variable
+#' @param token_file location of file to read token from
 #'
-#' @return An [arrow::Table]
+#' @return A `domino_data.data_sources.DataSourceClient`.
 #' @export
-query <- function(client, datasource, query, override = new.env()) {
-  datasource <- client$get_datasource(datasource)
-  result <- client$execute(
-    datasource$identifier,
-    query,
-    reticulate::dict(),
-    reticulate::dict()
-  )
-  result$reader$to_reader()$read_table()
+datasource_client <- function(api_key = NULL, token_file = NULL) {
+  ds <- reticulate::import("domino_data.data_sources")
+  if (!is.null(api_key) | !is.null(token_file)) {
+    return(ds$DataSourceClient(api_key, token_file))
+  }
+  ds$DataSourceClient()
 }

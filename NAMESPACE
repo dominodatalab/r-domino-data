@@ -3,5 +3,7 @@
 export(datasource_client)
 export(get_object)
 export(list_keys)
+export(put_object)
 export(query)
 export(save_object)
+export(upload_object)

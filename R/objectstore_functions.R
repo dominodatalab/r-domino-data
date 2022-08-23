@@ -39,12 +39,12 @@ list_keys <- function(client, datasource, prefix = "", override = new.env()) {
 #' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param object The object to retrieve
-#' @param override An environment with configuration overrides
 #' @param as Passed through to \code{\link[httr]{content}}
+#' @param override An environment with configuration overrides
 #'
 #' @return Raw vector representation of the object
 #' @export
-get_object <- function(client, datasource, object, override = new.env(), as = "raw") {
+get_object <- function(client, datasource, object, as = "raw", override = new.env()) {
   datasource <- client$get_datasource(datasource)
   url <- client$get_key_url(
     datasource$identifier,
@@ -53,7 +53,11 @@ get_object <- function(client, datasource, object, override = new.env(), as = "r
     reticulate::dict(),
     reticulate::dict()
   )
-  r <- objectGET(url, datasource_type = datasource$datasource_type)
+  r <- objectHTTP(
+    "GET",
+    url,
+    datasource_type = datasource$datasource_type
+  )
   httr::content(r, as = as)
 }
 
@@ -76,6 +80,75 @@ save_object <- function(client, datasource, object, file = basename(object), ove
     reticulate::dict(),
     reticulate::dict()
   )
-  r <- objectGET(url, datasource_type = datasource$datasource_type, write_disk = httr::write_disk(file))
+  r <- objectHTTP(
+    "GET",
+    url,
+    datasource_type = datasource$datasource_type,
+    write_disk = httr::write_disk(file),
+  )
   file
+}
+
+#' Upload an object to a datasource
+#'
+#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param datasource The name of the datasource to query
+#' @param object The object to retrieve
+#' @param what character vector, raw vector
+#' @param override An environment with configuration overrides
+#'
+#' @return Raw vector representation of the object
+#' @export
+put_object <- function(client, datasource, object, what, override = new.env()) {
+  if (!is.raw(what)) {
+    stop("Invalid payload of `what` - must be a raw vector or character vector")
+  }
+  if (is.character(what)) {
+    if (length(what) > 1) {
+      what <- paste(what, collapse = if (.Platform$OS.type == "unix") "\n" else "\r\n")
+    }
+    what <- if (length(what)) charToRaw(what) else raw()
+  }
+
+  datasource <- client$get_datasource(datasource)
+  url <- client$get_key_url(
+    datasource$identifier,
+    object,
+    TRUE,
+    reticulate::dict(),
+    reticulate::dict()
+  )
+  r <- objectHTTP(
+    "PUT",
+    url,
+    datasource_type = datasource$datasource_type,
+    request_body = what,
+  )
+}
+
+#' Upload a file to a datasource
+#'
+#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param datasource The name of the datasource to query
+#' @param object The object to retrieve
+#' @param file File path to upload..
+#' @param override An environment with configuration overrides
+#'
+#' @return Raw vector representation of the object
+#' @export
+upload_object <- function(client, datasource, object, file, override = new.env()) {
+  datasource <- client$get_datasource(datasource)
+  url <- client$get_key_url(
+    datasource$identifier,
+    object,
+    TRUE,
+    reticulate::dict(),
+    reticulate::dict()
+  )
+  r <- objectHTTP(
+    "PUT",
+    url,
+    datasource_type = datasource$datasource_type,
+    request_body = httr::upload_file(file),
+  )
 }

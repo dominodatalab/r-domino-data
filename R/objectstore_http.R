@@ -24,7 +24,6 @@
 #' @param config A list of config values for the REST call.
 #' @param headers A list of request headers for the REST call.
 #' @param request_body A character string containing request body data.
-#' @param show_progress A logical indicating whether to show a progress bar for downloads and uploads. Default is given by \code{options("verbose")}.
 #' @param write_disk An argument like \code{\link[httr]{write_disk}} to write the result directly to disk.
 #'
 #' @return a \code{\link[httr]{response}} object.
@@ -34,7 +33,6 @@ objectHTTP <- function(verb = "GET",
                        config = list(),
                        headers = list(),
                        request_body = "",
-                       show_progress = FALSE,
                        write_disk = NULL) {
   if (datasource_type == "ADLSConfig") {
     headers["X-Ms-Blob-Type"] <- "BlockBlob"
@@ -53,9 +51,9 @@ objectHTTP <- function(verb = "GET",
     }
   } else if (verb == "PUT") {
     if (is.character(request_body) && request_body == "") {
-      r <- httr::PUT(url, H, config, show_progress)
+      r <- httr::PUT(url, H, config)
     } else {
-      r <- httr::PUT(url, H, config, body = request_body, show_progress)
+      r <- httr::PUT(url, H, config, body = request_body)
     }
   }
   r

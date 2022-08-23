@@ -100,14 +100,14 @@ save_object <- function(client, datasource, object, file = basename(object), ove
 #' @return Raw vector representation of the object
 #' @export
 put_object <- function(client, datasource, object, what, override = new.env()) {
-  if (!is.raw(what)) {
-    stop("Invalid payload of `what` - must be a raw vector or character vector")
-  }
   if (is.character(what)) {
     if (length(what) > 1) {
       what <- paste(what, collapse = if (.Platform$OS.type == "unix") "\n" else "\r\n")
     }
     what <- if (length(what)) charToRaw(what) else raw()
+  }
+  if (!is.raw(what)) {
+    stop("Invalid payload of `what` - must be a raw vector or character vector")
   }
 
   datasource <- client$get_datasource(datasource)
@@ -124,6 +124,7 @@ put_object <- function(client, datasource, object, what, override = new.env()) {
     datasource_type = datasource$datasource_type,
     request_body = what,
   )
+  httr::http_status(r)$message
 }
 
 #' Upload a file to a datasource
@@ -151,4 +152,5 @@ upload_object <- function(client, datasource, object, file, override = new.env()
     datasource_type = datasource$datasource_type,
     request_body = httr::upload_file(file),
   )
+  httr::http_status(r)$message
 }

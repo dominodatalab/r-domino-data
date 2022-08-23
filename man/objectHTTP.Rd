@@ -11,7 +11,6 @@ objectHTTP(
   config = list(),
   headers = list(),
   request_body = "",
-  show_progress = FALSE,
   write_disk = NULL
 )
 }
@@ -27,8 +26,6 @@ objectHTTP(
 \item{headers}{A list of request headers for the REST call.}
 
 \item{request_body}{A character string containing request body data.}
-
-\item{show_progress}{A logical indicating whether to show a progress bar for downloads and uploads. Default is given by \code{options("verbose")}.}
 
 \item{write_disk}{An argument like \code{\link[httr]{write_disk}} to write the result directly to disk.}
 }

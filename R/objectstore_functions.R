@@ -40,7 +40,7 @@ list_keys <- function(client, datasource, prefix = "", override = new.env()) {
 #' @param datasource The name of the datasource to query
 #' @param object The object to retrieve
 #' @param override An environment with configuration overrides
-#' @param as Passed through to \code{httr::content}
+#' @param as Passed through to \code{\link[httr]{content}}
 #'
 #' @return Raw vector representation of the object
 #' @export
@@ -53,7 +53,29 @@ get_object <- function(client, datasource, object, override = new.env(), as = "r
     reticulate::dict(),
     reticulate::dict()
   )
-  # TODO Headers for generic s3 and ADLS
-  r <- httr::GET(url)
+  r <- objectGET(url, datasource_type = datasource$datasource_type)
   httr::content(r, as = as)
+}
+
+#' Save an object from a datasource to a local file
+#'
+#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param datasource The name of the datasource to query
+#' @param object The object to retrieve
+#' @param file File path to save object at. Defaults to the object base name.
+#' @param override An environment with configuration overrides
+#'
+#' @return Raw vector representation of the object
+#' @export
+save_object <- function(client, datasource, object, file = basename(object), override = new.env()) {
+  datasource <- client$get_datasource(datasource)
+  url <- client$get_key_url(
+    datasource$identifier,
+    object,
+    FALSE,
+    reticulate::dict(),
+    reticulate::dict()
+  )
+  r <- objectGET(url, datasource_type = datasource$datasource_type, write_disk = httr::write_disk(file))
+  file
 }

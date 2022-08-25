@@ -18,22 +18,25 @@
 #' HTTP requests for Object Stores
 #'
 #' @details This is mostly for internal use by object store APIs.
-#' @param verb A character string containing an HTTP verb, defaulting to \dQuote{GET}.
+#' @param verb A character string containing an HTTP verb, defaulting
+#'   to \dQuote{GET}.
 #' @param url Signed URL to download object at.
 #' @param datasource_type Type of datasource the object is stored in.
 #' @param config A list of config values for the REST call.
 #' @param headers A list of request headers for the REST call.
 #' @param request_body A character string containing request body data.
-#' @param write_disk An argument like \code{\link[httr]{write_disk}} to write the result directly to disk.
+#' @param write_disk An argument like \code{\link[httr]{write_disk}} to
+#'   write the result directly to disk.
 #'
+#' @export
 #' @return a \code{\link[httr]{response}} object.
-objectHTTP <- function(verb = "GET",
-                       url,
-                       datasource_type,
-                       config = list(),
-                       headers = list(),
-                       request_body = "",
-                       write_disk = NULL) {
+object_http <- function(verb = "GET",
+                        url,
+                        datasource_type,
+                        config = list(),
+                        headers = list(),
+                        request_body = "",
+                        write_disk = NULL) {
   if (datasource_type == "ADLSConfig") {
     headers["X-Ms-Blob-Type"] <- "BlockBlob"
   }
@@ -41,19 +44,19 @@ objectHTTP <- function(verb = "GET",
     config <- httr::config(ssl_verifypeer = FALSE)
   }
 
-  H <- do.call(httr::add_headers, headers)
+  h <- do.call(httr::add_headers, headers)
 
   if (verb == "GET") {
     if (!is.null(write_disk)) {
-      r <- httr::GET(url, H, config, write_disk)
+      r <- httr::GET(url, h, config, write_disk)
     } else {
-      r <- httr::GET(url, H, config)
+      r <- httr::GET(url, h, config)
     }
   } else if (verb == "PUT") {
     if (is.character(request_body) && request_body == "") {
-      r <- httr::PUT(url, H, config)
+      r <- httr::PUT(url, h, config)
     } else {
-      r <- httr::PUT(url, H, config, body = request_body)
+      r <- httr::PUT(url, h, config, body = request_body)
     }
   }
   r

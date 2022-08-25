@@ -19,20 +19,21 @@
 #'
 #' @import arrow
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param query The query to run against the provided datasource
-#' @param override An environment with configuration overrides
+#' @param override Configuration values to override ([add_override()])
 #'
 #' @return An [arrow::Table]
 #' @export
-query <- function(client, datasource, query, override = new.env()) {
+query <- function(client, datasource, query, override = list()) {
   datasource <- client$get_datasource(datasource)
+  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   result <- client$execute(
     datasource$identifier,
     query,
-    reticulate::dict(),
-    reticulate::dict()
+    reticulate::dict(override),
+    reticulate::dict(credentials)
   )
   result$reader$to_reader()$read_table()
 }

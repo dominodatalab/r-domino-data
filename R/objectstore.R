@@ -17,43 +17,52 @@
 
 #' List the keys starting with prefix in an object store
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param prefix Prefix to filter keys to list
-#' @param override An environment with configuration overrides
+#' @param override Configuration values to override ([add_override()])
 #'
 #' @return A vector or string keys
 #' @export
-list_keys <- function(client, datasource, prefix = "", override = new.env()) {
+list_keys <- function(client,
+                      datasource,
+                      prefix = "",
+                      override = list()) {
   datasource <- client$get_datasource(datasource)
+  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   client$list_keys(
     datasource$identifier,
     prefix,
-    reticulate::dict(),
-    reticulate::dict()
+    reticulate::dict(override),
+    reticulate::dict(credentials)
   )
 }
 
 #' Retrieve an object from a datasource
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param object The object to retrieve
 #' @param as Passed through to \code{\link[httr]{content}}
-#' @param override An environment with configuration overrides
+#' @param override Configuration values to override ([add_override()])
 #'
 #' @return Raw vector representation of the object
 #' @export
-get_object <- function(client, datasource, object, as = "raw", override = new.env()) {
+get_object <- function(client,
+                       datasource,
+                       object,
+                       as = "raw",
+                       override = list()) {
   datasource <- client$get_datasource(datasource)
+  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
     FALSE,
-    reticulate::dict(),
-    reticulate::dict()
+    reticulate::dict(override),
+    reticulate::dict(credentials)
   )
-  r <- objectHTTP(
+  r <- DominoDataR::object_http(
     "GET",
     url,
     datasource_type = datasource$datasource_type
@@ -63,24 +72,29 @@ get_object <- function(client, datasource, object, as = "raw", override = new.en
 
 #' Save an object from a datasource to a local file
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param object The object to retrieve
 #' @param file File path to save object at. Defaults to the object base name.
-#' @param override An environment with configuration overrides
+#' @param override Configuration values to override ([add_override()])
 #'
 #' @return Raw vector representation of the object
 #' @export
-save_object <- function(client, datasource, object, file = basename(object), override = new.env()) {
+save_object <- function(client,
+                        datasource,
+                        object,
+                        file = basename(object),
+                        override = list()) {
   datasource <- client$get_datasource(datasource)
+  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
     FALSE,
-    reticulate::dict(),
-    reticulate::dict()
+    reticulate::dict(override),
+    reticulate::dict(credentials)
   )
-  r <- objectHTTP(
+  DominoDataR::object_http(
     "GET",
     url,
     datasource_type = datasource$datasource_type,
@@ -91,18 +105,25 @@ save_object <- function(client, datasource, object, file = basename(object), ove
 
 #' Upload an object to a datasource
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param object The object to retrieve
 #' @param what character vector, raw vector
-#' @param override An environment with configuration overrides
+#' @param override Configuration values to override ([add_override()])
 #'
 #' @return Raw vector representation of the object
 #' @export
-put_object <- function(client, datasource, object, what, override = new.env()) {
+put_object <- function(client,
+                       datasource,
+                       object,
+                       what,
+                       override = list()) {
   if (is.character(what)) {
     if (length(what) > 1) {
-      what <- paste(what, collapse = if (.Platform$OS.type == "unix") "\n" else "\r\n")
+      what <- paste(
+        what,
+        collapse = if (.Platform$OS.type == "unix") "\n" else "\r\n",
+      )
     }
     what <- if (length(what)) charToRaw(what) else raw()
   }
@@ -111,14 +132,15 @@ put_object <- function(client, datasource, object, what, override = new.env()) {
   }
 
   datasource <- client$get_datasource(datasource)
+  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
     TRUE,
-    reticulate::dict(),
-    reticulate::dict()
+    reticulate::dict(override),
+    reticulate::dict(credentials)
   )
-  r <- objectHTTP(
+  r <- DominoDataR::object_http(
     "PUT",
     url,
     datasource_type = datasource$datasource_type,
@@ -129,24 +151,29 @@ put_object <- function(client, datasource, object, what, override = new.env()) {
 
 #' Upload a file to a datasource
 #'
-#' @param client `domino_data.data_sources.DataSourceClient`, as returned by [datasource_client()]
+#' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param object The object to retrieve
 #' @param file File path to upload..
-#' @param override An environment with configuration overrides
+#' @param override Configuration values to override ([add_override()])
 #'
 #' @return Raw vector representation of the object
 #' @export
-upload_object <- function(client, datasource, object, file, override = new.env()) {
+upload_object <- function(client,
+                          datasource,
+                          object,
+                          file,
+                          override = list()) {
   datasource <- client$get_datasource(datasource)
+  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
     TRUE,
-    reticulate::dict(),
-    reticulate::dict()
+    reticulate::dict(override),
+    reticulate::dict(credentials)
   )
-  r <- objectHTTP(
+  r <- DominoDataR::object_http(
     "PUT",
     url,
     datasource_type = datasource$datasource_type,

@@ -4,7 +4,7 @@
 \alias{load_aws_credentials}
 \title{Load AWS Credentials}
 \usage{
-load_aws_credentials(location = NULL, profile = NULL)
+load_aws_credentials(location, profile = NULL)
 }
 \arguments{
 \item{location}{file path where AWS credentials are located}

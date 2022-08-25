@@ -40,10 +40,15 @@ add_override <- function(..., .override = character()) {
 #' @export
 add_credentials <- function(auth_type, config = list()) {
   if (auth_type == "OAuth") {
-    credentials <- load_oauth_credentials(Sys.getenv("DOMINO_TOKEN_FILE"))
+    credentials <- load_oauth_credentials(
+      Sys.getenv("DOMINO_TOKEN_FILE", "/var/lib/domino/home/.api/token")
+    )
   } else if (is.element(auth_type, c("AWSIAMRole", "AWSIAMRoleWithUsername"))) {
     credentials <- load_aws_credentials(
-      Sys.getenv("AWS_SHARED_CREDENTIALS_FILE"),
+      Sys.getenv(
+        "AWS_SHARED_CREDENTIALS_FILE",
+        "/var/lib/domino/home/.aws/credentials"
+      ),
       config[["profile"]]
     )
   } else {
@@ -58,17 +63,14 @@ add_credentials <- function(auth_type, config = list()) {
 #' @param profile AWS profile or section to use
 #'
 #' @return named listed of override configuration values
-load_aws_credentials <- function(location = NULL, profile = NULL) {
-  if (is.null(location)) {
-    location <- "/var/lib/domino/home/.aws/credentials"
-  }
+load_aws_credentials <- function(location, profile = NULL) {
   c <- ConfigParser::ConfigParser$new()
   c$read(location)
 
   list(
-    accessKeyID = c$get("aws_access_key_id", section = profile),
-    secretAccessKey = c$get("aws_secret_access_key", section = profile),
-    sessionToken = c$get("aws_session_token", section = profile)
+    accessKeyID = c$get("aws_access_key_id", NULL, section = profile),
+    secretAccessKey = c$get("aws_secret_access_key", NULL, section = profile),
+    sessionToken = c$get("aws_session_token", NULL, section = profile)
   )
 }
 
@@ -77,10 +79,7 @@ load_aws_credentials <- function(location = NULL, profile = NULL) {
 #' @param location file path where token is located
 #'
 #' @return named listed of override configuration values
-load_oauth_credentials <- function(location = NULL) {
-  if (is.null(location)) {
-    location <- "/var/lib/domino/home/.api/token"
-  }
+load_oauth_credentials <- function(location) {
   list(
     token = readChar(location, file.info(location)$size)
   )

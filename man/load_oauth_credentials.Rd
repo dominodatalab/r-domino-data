@@ -4,7 +4,7 @@
 \alias{load_oauth_credentials}
 \title{Load OAuth Credentials}
 \usage{
-load_oauth_credentials(location = NULL)
+load_oauth_credentials(location)
 }
 \arguments{
 \item{location}{file path where token is located}

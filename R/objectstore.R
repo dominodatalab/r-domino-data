@@ -122,7 +122,7 @@ put_object <- function(client,
     if (length(what) > 1) {
       what <- paste(
         what,
-        collapse = if (.Platform$OS.type == "unix") "\n" else "\r\n",
+        collapse = if (.Platform$OS.type == "unix") "\n" else "\r\n"
       )
     }
     what <- if (length(what)) charToRaw(what) else raw()

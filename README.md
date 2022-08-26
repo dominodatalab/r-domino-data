@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-Domino Data API for interacting with Data features.
+Domino Data API for interacting with Domino Data Sources.
 
 ## Installation
 

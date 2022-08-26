@@ -13,7 +13,7 @@ Domino Data API for interacting with Data features.
 You can install the development version of DominoDataR like so:
 
 ``` r
-library(devtools)
+library(remotes)
 install_github("dominodatalab/r-domino-data")
 ```
 

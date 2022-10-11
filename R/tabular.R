@@ -28,7 +28,7 @@
 #' @export
 query <- function(client, datasource, query, override = list()) {
   datasource <- client$get_datasource(datasource)
-  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
+  credentials <- DominoDataR::add_credentials(DominoDataR::get_auth_type(datasource), override)
   result <- client$execute(
     datasource$identifier,
     query,

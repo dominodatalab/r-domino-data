@@ -31,6 +31,21 @@ add_override <- function(..., .override = character()) {
   as.list(override)
 }
 
+#' Get datasource auth type (backward compatible)
+#'
+#' @param datasource datasource to retrieve auth type for
+#'
+#' @return Auth type of datasource
+#' @export
+get_auth_type <- function(datasource) {
+    if ("auth_type" %in% names(datasource)) {
+        auth_type <- datasource$auth_type
+    } else {
+        auth_type <- "Basic"
+    }
+    auth_type
+}
+
 #' Add credentials override for the right datasources
 #'
 #' @param auth_type Datasource Authentication type

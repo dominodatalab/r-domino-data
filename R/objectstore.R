@@ -27,12 +27,14 @@
 list_keys <- function(client,
                       datasource,
                       prefix = "",
-                      override = list()) {
+                      override = list(),
+                      page_size = 50) {
   datasource <- client$get_datasource(datasource)
   credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
   client$list_keys(
     datasource$identifier,
     prefix,
+    page_size,
     reticulate::dict(override),
     reticulate::dict(credentials)
   )

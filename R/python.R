@@ -5,12 +5,12 @@ python_select_interpreter <- function() {
   #
   PYTHON_PATH <- c(
     "/opt/conda/bin/python",
-    "/usr/bin/python"
+    "/usr/bin/python",
+    path.expand("~/.virtualenvs/r-reticulate/bin/python")
   )
   #
   for (path in PYTHON_PATH) {
     if (file.exists(path)) {
-      message("Using Python interpreter at ", path, ".")
       reticulate::use_python(path)
       break
     }

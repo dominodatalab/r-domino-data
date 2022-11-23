@@ -3,4 +3,4 @@
 set -x
 set -e
 
-${R_HOME}/bin/Rscript scripts/python-setup.R
+${R_HOME}/bin/Rscript inst/scripts/python-setup.R

@@ -1,4 +1,4 @@
-python_select_interpreter <- function() {
+py_select_interpreter <- function() {
   # Tell {reticulate} to use the Conda version of Python available on Domino Data Lab.
   #
   # Provide other options in case the package is being used for local development.
@@ -20,5 +20,15 @@ python_select_interpreter <- function() {
   #
   if (!reticulate::py_available(initialize = TRUE)) {
     try(reticulate::install_miniconda())
+  }
+}
+
+py_install <- function() {
+  py_select_interpreter()
+
+  # Install the (Python) domino_data package.
+  #
+  if (!reticulate::py_module_available("domino_data")) {
+    reticulate::py_install("dominodatalab-data", pip = TRUE, method = "virtualenv")
   }
 }

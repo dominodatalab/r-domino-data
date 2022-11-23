@@ -1,3 +1,3 @@
 .onLoad <- function(libname, pkgname) {
-  python_select_interpreter()
+  py_select_interpreter()
 }

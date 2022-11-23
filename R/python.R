@@ -23,6 +23,7 @@ py_select_interpreter <- function() {
   }
 }
 
+#' @export
 py_install <- function() {
   py_select_interpreter()
 

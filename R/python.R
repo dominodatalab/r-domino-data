@@ -24,7 +24,7 @@ py_select_interpreter <- function() {
 }
 
 #' @export
-py_install <- function() {
+py_domino_data_install <- function() {
   py_select_interpreter()
 
   # Install the (Python) domino_data package.

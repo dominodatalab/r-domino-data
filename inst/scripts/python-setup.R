@@ -1,3 +1,3 @@
 source("R/python.R")
 
-py_install()
+py_domino_data_install()

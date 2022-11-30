@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-Domino Data API for interacting with Domino Data Sources.
+Domino Data API for interacting with Data features.
 
 ## Installation
 
@@ -17,11 +17,12 @@ install.packages("remotes")
 remotes::install_github("dominodatalab/DominoDataR")
 ```
 
-The Domino Data R library depends on the [python
-library](https://pypi.org/project/dominodatalab-data/). Make sure it is
-installed in your environment or use the following command:
+The Domino Data R library depends on the [Python
+library](https://pypi.org/project/dominodatalab-data/). This should be
+installed automatically when `{DominoDataR}` is installed. You can also
+install manually.
 
 ``` r
-library(reticulate)
-py_install("dominodatalab-data")
+library(DominoDataR)
+py_domino_data_install()
 ```

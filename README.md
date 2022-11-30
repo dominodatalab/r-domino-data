@@ -14,7 +14,7 @@ You can install the development version of DominoDataR like so:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("dominodatalab/r-domino-data")
+remotes::install_github("dominodatalab/DominoDataR")
 ```
 
 The Domino Data R library depends on the [python

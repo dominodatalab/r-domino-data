@@ -4,7 +4,7 @@
 \alias{list_keys}
 \title{List the keys starting with prefix in an object store}
 \usage{
-list_keys(client, datasource, prefix = "", override = list())
+list_keys(client, datasource, prefix = "", override = list(), page_size = 50)
 }
 \arguments{
 \item{client}{As returned by \code{\link[=datasource_client]{datasource_client()}}}

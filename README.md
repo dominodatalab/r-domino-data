@@ -1,9 +1,7 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # DominoDataR
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/dominodatalab/DominoDataR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dominodatalab/DominoDataR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Domino Data API for interacting with Domino Data Sources.

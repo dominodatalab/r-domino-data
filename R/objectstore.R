@@ -21,6 +21,7 @@
 #' @param datasource The name of the datasource to query
 #' @param prefix Prefix to filter keys to list
 #' @param override Configuration values to override ([add_override()])
+#' @param page_size Number of objects to fetch
 #'
 #' @return A vector or string keys
 #' @export

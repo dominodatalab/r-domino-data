@@ -5,8 +5,8 @@ py_select_interpreter <- function() {
   #
   PYTHON_PATH <- c(
     "/opt/conda/bin/python",
-    "/usr/bin/python",
-    path.expand("~/.virtualenvs/r-reticulate/bin/python")
+    path.expand("~/.virtualenvs/r-reticulate/bin/python"),
+    "/usr/bin/python"
   )
   #
   for (path in PYTHON_PATH) {

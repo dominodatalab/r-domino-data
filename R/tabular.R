@@ -17,8 +17,6 @@
 
 #' Query a datasource and returns an arrow Table
 #'
-#' @import arrow
-#'
 #' @param client As returned by [datasource_client()]
 #' @param datasource The name of the datasource to query
 #' @param query The query to run against the provided datasource

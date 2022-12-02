@@ -31,7 +31,7 @@ list_keys <- function(client,
                       override = list(),
                       page_size = 50) {
   datasource <- client$get_datasource(datasource)
-  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
+  credentials <- DominoDataR::add_credentials(DominoDataR::get_auth_type(datasource), override)
   client$list_keys(
     datasource$identifier,
     prefix,
@@ -57,7 +57,7 @@ get_object <- function(client,
                        as = "raw",
                        override = list()) {
   datasource <- client$get_datasource(datasource)
-  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
+  credentials <- DominoDataR::add_credentials(DominoDataR::get_auth_type(datasource), override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
@@ -89,7 +89,7 @@ save_object <- function(client,
                         file = basename(object),
                         override = list()) {
   datasource <- client$get_datasource(datasource)
-  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
+  credentials <- DominoDataR::add_credentials(DominoDataR::get_auth_type(datasource), override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
@@ -135,7 +135,7 @@ put_object <- function(client,
   }
 
   datasource <- client$get_datasource(datasource)
-  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
+  credentials <- DominoDataR::add_credentials(DominoDataR::get_auth_type(datasource), override)
   url <- client$get_key_url(
     datasource$identifier,
     object,
@@ -168,7 +168,7 @@ upload_object <- function(client,
                           file,
                           override = list()) {
   datasource <- client$get_datasource(datasource)
-  credentials <- DominoDataR::add_credentials(datasource$auth_type, override)
+  credentials <- DominoDataR::add_credentials(DominoDataR::get_auth_type(datasource), override)
   url <- client$get_key_url(
     datasource$identifier,
     object,

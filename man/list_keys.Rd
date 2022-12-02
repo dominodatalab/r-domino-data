@@ -14,6 +14,8 @@ list_keys(client, datasource, prefix = "", override = list(), page_size = 50)
 \item{prefix}{Prefix to filter keys to list}
 
 \item{override}{Configuration values to override (\code{\link[=add_override]{add_override()}})}
+
+\item{page_size}{Number of objects to fetch}
 }
 \value{
 A vector or string keys

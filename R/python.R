@@ -23,13 +23,24 @@ py_select_interpreter <- function() {
   }
 }
 
+#' Install domino_data Python package
+#'
+#' @return `TRUE` if installation successful, otherwise `FALSE`.
 #' @export
+#'
+#' @examples
+#' py_domino_data_install()
 py_domino_data_install <- function() {
   py_select_interpreter()
 
   # Install the (Python) domino_data package.
   #
   if (!reticulate::py_module_available("domino_data")) {
-    reticulate::py_install("dominodatalab-data", pip = TRUE, method = "virtualenv")
+    result <- try(
+      reticulate::py_install("dominodatalab-data", pip = TRUE, method = "virtualenv")
+    )
+    !is(result, "try-error")
+  } else {
+    TRUE
   }
 }

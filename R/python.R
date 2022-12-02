@@ -33,7 +33,7 @@ py_domino_data_install <- function() {
   #
   if (!reticulate::py_module_available("domino_data")) {
     result <- tryCatch({
-      reticulate::py_install("dominodatalab-data", pip = TRUE, method = "virtualenv")
+      reticulate::py_install("dominodatalab-data>=0.3.0,<0.4.0", pip = TRUE, method = "virtualenv")
       TRUE
     }, error = function(e) {
       FALSE

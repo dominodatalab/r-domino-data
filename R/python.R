@@ -36,10 +36,12 @@ py_domino_data_install <- function() {
   # Install the (Python) domino_data package.
   #
   if (!reticulate::py_module_available("domino_data")) {
-    result <- try(
+    result <- tryCatch({
       reticulate::py_install("dominodatalab-data", pip = TRUE, method = "virtualenv")
-    )
-    !is(result, "try-error")
+      TRUE
+    }, error = function(e) {
+      FALSE
+    })
   } else {
     TRUE
   }

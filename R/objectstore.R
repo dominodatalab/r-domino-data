@@ -35,7 +35,7 @@ list_keys <- function(client,
   client$list_keys(
     datasource$identifier,
     prefix,
-    page_size,
+    as.integer(page_size),
     reticulate::dict(override),
     reticulate::dict(credentials)
   )

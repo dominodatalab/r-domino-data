@@ -25,15 +25,21 @@ py_select_interpreter <- function() {
 
 #' Install domino_data Python package
 #' @return `TRUE` if installation was successful, `FALSE` otherwise.
+#' @param version Version of the domino_data package to install.
 #' @export
-py_domino_data_install <- function() {
+py_domino_data_install <- function(version) {
   py_select_interpreter()
 
   # Install the (Python) domino_data package.
   #
   if (!reticulate::py_module_available("domino_data")) {
+    if missing(version) {
+      package <- "dominodatalab-data"
+    } else {
+      package <- paste0("dominodatalab-data==", version)
+    }
     result <- tryCatch({
-      reticulate::py_install("dominodatalab-data", pip = TRUE, method = "virtualenv")
+      reticulate::py_install(package, pip = TRUE, method = "virtualenv")
       TRUE
     }, error = function(e) {
       FALSE

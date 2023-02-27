@@ -33,7 +33,7 @@ py_domino_data_install <- function(version) {
   # Install the (Python) domino_data package.
   #
   if (!reticulate::py_module_available("domino_data")) {
-    if missing(version) {
+    if (missing(version)) {
       package <- "dominodatalab-data"
     } else {
       package <- paste0("dominodatalab-data==", version)

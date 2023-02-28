@@ -4,7 +4,10 @@
 \alias{py_domino_data_install}
 \title{Install domino_data Python package}
 \usage{
-py_domino_data_install()
+py_domino_data_install(version)
+}
+\arguments{
+\item{version}{Version of the domino_data package to install.}
 }
 \value{
 \code{TRUE} if installation was successful, \code{FALSE} otherwise.

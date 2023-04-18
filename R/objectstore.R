@@ -101,7 +101,7 @@ save_object <- function(client,
     "GET",
     url,
     datasource_type = datasource$datasource_type,
-    write_disk = httr::write_disk(file, override = TRUE),
+    write_disk = httr::write_disk(file, overwrite = TRUE),
   )
   file
 }

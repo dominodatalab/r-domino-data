@@ -1,49 +1,58 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+name: R-CMD-check
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
-
-name: R-CMD-check
-
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
     strategy:
       fail-fast: false
       matrix:
         config:
           - {os: macos-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
+            # - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
-
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-
+      # Simulate Domino env variables
+      DOMINO_USER_API_KEY: "dummy_key"
+      DOMINO_API_HOST: http://localhost:3000
+      DOMINO_DATASOURCE_PROXY_FLIGHT_HOST: grpc://localhost:8080
+      DOMINO_DATASOURCE_PROXY_HOST: http://localhost:8034
     steps:
       - uses: actions/checkout@v3
-
       - uses: r-lib/actions/setup-pandoc@v2
-
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
           needs: check
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: setup r-reticulate env
+        shell: Rscript {0}
+        run: |
+          python_packages <- c("dominodatalab-data")
 
+          library(reticulate)
+          virtualenv_create("r-reticulate", Sys.which("python"))
+          virtualenv_install("r-reticulate", python_packages)
+
+          path_to_python <- virtualenv_python("r-reticulate")
+          writeLines(sprintf("RETICULATE_PYTHON=%s", path_to_python), Sys.getenv("GITHUB_ENV"))
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true

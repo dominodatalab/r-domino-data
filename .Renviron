@@ -1,0 +1,4 @@
+DOMINO_USER_API_KEY="<get from a domino workspace>"
+DOMINO_API_HOST="<URL of your deployment>"
+DOMINO_DATASOURCE_PROXY_FLIGHT_HOST=grpc://localhost:8080
+DOMINO_DATASOURCE_PROXY_HOST=http://localhost:8034

@@ -23,9 +23,8 @@
 #' @return A `domino_data.data_sources.DataSourceClient`.
 #' @export
 datasource_client <- function(api_key = NULL, token_file = NULL) {
-  ds <- reticulate::import("domino_data.data_sources")
   if (!is.null(api_key) || !is.null(token_file)) {
-    return(ds$DataSourceClient(api_key, token_file))
+    return(domino_data_sources$DataSourceClient(api_key, token_file))
   }
-  ds$DataSourceClient()
+  domino_data_sources$DataSourceClient()
 }

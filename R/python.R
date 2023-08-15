@@ -1,8 +1,9 @@
+#' Tell {reticulate} to use Python Conda version available on Domino Data Lab.
+#'
+#' Provide other options in case the package is used for local development.
+#'
+#' @export
 py_select_interpreter <- function() {
-  # Tell {reticulate} to use the Conda version of Python available on Domino Data Lab.
-  #
-  # Provide other options in case the package is being used for local development.
-  #
   PYTHON_PATH <- c(
     "/opt/conda/bin/python",
     path.expand("~/.virtualenvs/r-reticulate/bin/python"),
@@ -14,12 +15,6 @@ py_select_interpreter <- function() {
       reticulate::use_python(path)
       break
     }
-  }
-  #
-  # If no Python is present (or not in the expected place), then install MiniConda.
-  #
-  if (!reticulate::py_available(initialize = TRUE)) {
-    try(reticulate::install_miniconda())
   }
 }
 
@@ -38,12 +33,15 @@ py_domino_data_install <- function(version) {
     } else {
       package <- paste0("dominodatalab-data==", version)
     }
-    result <- tryCatch({
-      reticulate::py_install(package, pip = TRUE, method = "virtualenv")
-      TRUE
-    }, error = function(e) {
-      FALSE
-    })
+    result <- tryCatch(
+      {
+        reticulate::py_install(package, pip = TRUE, method = "virtualenv")
+        TRUE
+      },
+      error = function(e) {
+        FALSE
+      }
+    )
     result
   } else {
     TRUE

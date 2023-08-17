@@ -6,6 +6,9 @@
 \usage{
 py_select_interpreter()
 }
+\value{
+\code{TRUE} if a python binary was bound to reticulate, \code{FALSE} otherwise
+}
 \description{
 Provide other options in case the package is used for local development.
 }

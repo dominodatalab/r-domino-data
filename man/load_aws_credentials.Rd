@@ -12,7 +12,7 @@ load_aws_credentials(location, profile = NULL)
 \item{profile}{AWS profile or section to use}
 }
 \value{
-named listed of override configuration values
+named list of override configuration values
 }
 \description{
 Load AWS Credentials

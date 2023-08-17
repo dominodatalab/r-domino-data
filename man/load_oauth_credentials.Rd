@@ -10,7 +10,7 @@ load_oauth_credentials(location)
 \item{location}{file path where token is located}
 }
 \value{
-named listed of override configuration values
+named list of override configuration values
 }
 \description{
 Load OAuth Credentials

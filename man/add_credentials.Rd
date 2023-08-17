@@ -12,7 +12,7 @@ add_credentials(auth_type, config = list())
 \item{config}{existing config override to extend}
 }
 \value{
-named listed of override configuration values
+named list of override configuration values
 }
 \description{
 Add credentials override for the right datasources

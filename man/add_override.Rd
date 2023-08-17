@@ -11,6 +11,9 @@ add_override(..., .override = character())
 
 \item{.override}{a named character vector}
 }
+\value{
+named list of override configuration values
+}
 \description{
-TODO
+Add override configuration values
 }

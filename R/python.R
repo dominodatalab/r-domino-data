@@ -2,6 +2,7 @@
 #'
 #' Provide other options in case the package is used for local development.
 #'
+#' @return `TRUE` if a python binary was bound to reticulate, `FALSE` otherwise
 #' @export
 py_select_interpreter <- function() {
   PYTHON_PATH <- c(
@@ -13,12 +14,14 @@ py_select_interpreter <- function() {
   for (path in PYTHON_PATH) {
     if (file.exists(path)) {
       reticulate::use_python(path)
-      break
+      return(TRUE)
     }
   }
+  return(FALSE)
 }
 
 #' Install domino_data Python package
+#'
 #' @return `TRUE` if installation was successful, `FALSE` otherwise.
 #' @param version Version of the domino_data package to install.
 #' @export

@@ -17,11 +17,10 @@
 
 #' Add override configuration values
 #'
-#' TODO
-#'
 #' @param ... named configuration values.
 #' @param .override a named character vector
 #'
+#' @return named list of override configuration values
 #' @export
 add_override <- function(..., .override = character()) {
   override <- c(..., .override)
@@ -36,7 +35,7 @@ add_override <- function(..., .override = character()) {
 #' @param auth_type Datasource Authentication type
 #' @param config existing config override to extend
 #'
-#' @return named listed of override configuration values
+#' @return named list of override configuration values
 #' @export
 add_credentials <- function(auth_type, config = list()) {
   if (auth_type == "OAuth") {
@@ -62,7 +61,7 @@ add_credentials <- function(auth_type, config = list()) {
 #' @param location file path where AWS credentials are located
 #' @param profile AWS profile or section to use
 #'
-#' @return named listed of override configuration values
+#' @return named list of override configuration values
 load_aws_credentials <- function(location, profile = NULL) {
   c <- ConfigParser::ConfigParser$new()
   c$read(location)
@@ -78,7 +77,7 @@ load_aws_credentials <- function(location, profile = NULL) {
 #'
 #' @param location file path where token is located
 #'
-#' @return named listed of override configuration values
+#' @return named list of override configuration values
 load_oauth_credentials <- function(location) {
   list(
     token = readChar(location, file.info(location)$size)

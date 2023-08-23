@@ -23,8 +23,17 @@
 #' @return A `domino_data.data_sources.DataSourceClient`.
 #' @export
 datasource_client <- function(api_key = NULL, token_file = NULL) {
+  envvar <- c("DOMINO_CLIENT_SOURCE" = "R")
   if (!is.null(api_key) || !is.null(token_file)) {
-    return(domino_data_sources$DataSourceClient(api_key, token_file))
+    client <- withr::with_envvar(
+      new = envvar,
+      domino_data_sources$DataSourceClient(api_key, token_file)
+    )
+  } else {
+    client <- withr::with_envvar(
+      new = envvar,
+      domino_data_sources$DataSourceClient()
+    )
   }
-  domino_data_sources$DataSourceClient()
+  return(client)
 }

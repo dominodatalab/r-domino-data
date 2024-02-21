@@ -95,5 +95,5 @@ make_request <- function(verb, url, config, headers, request_body, write_disk) {
 encode_url_path <- function(url) {
   parsed <- urltools::url_parse(url)
   parsed$path <- urltools::url_encode(parsed$path)
-  urltools::url_parse(parsed)
+  urltools::url_compose()(parsed)
 }

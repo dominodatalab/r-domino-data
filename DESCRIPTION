@@ -21,7 +21,8 @@ Imports:
     arrow,
     ConfigParser,
     httr,
-    reticulate (<= 1.34.0),
+    reticulate,
+    urltools,
     withr
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3

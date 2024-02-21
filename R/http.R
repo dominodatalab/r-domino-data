@@ -46,18 +46,54 @@ object_http <- function(verb = "GET",
 
   h <- do.call(httr::add_headers, headers)
 
+  r <- make_request(verb, url, h, config, request_body, write_disk)
+  if (r$status_code == 400) {
+    new_url <- encode_url_path(url)
+    r <- make_request(verb, new_url, h, config, request_body, write_disk)
+  }
+  r
+}
+
+
+#' Make the HTTP request
+#'
+#' @details Internal only to enable retry for malformed URLs.
+#' @param verb A character string containing an HTTP verb
+#' @param url Signed URL to download object at.
+#' @param datasource_type Type of datasource the object is stored in.
+#' @param config A list of config values for the REST call.
+#' @param headers A list of request headers for the REST call.
+#' @param request_body A character string containing request body data.
+#' @param write_disk An argument like \code{\link[httr]{write_disk}} to
+#'   write the result directly to disk.
+#'
+#' @return a \code{\link[httr]{response}} object.
+make_request <- function(verb, url, config, headers, request_body, write_disk) {
   if (verb == "GET") {
     if (!is.null(write_disk)) {
-      r <- httr::GET(url, h, config, write_disk)
+      r <- httr::GET(url, headers, config, write_disk)
     } else {
-      r <- httr::GET(url, h, config)
+      r <- httr::GET(url, headers, config)
     }
   } else if (verb == "PUT") {
     if (is.character(request_body) && request_body == "") {
-      r <- httr::PUT(url, h, config)
+      r <- httr::PUT(url, headers, config)
     } else {
-      r <- httr::PUT(url, h, config, body = request_body)
+      r <- httr::PUT(url, headers, config, body = request_body)
     }
   }
   r
+}
+
+
+#' Properly escape a URL path
+#'
+#' @details Internal only to fix malformed URLs.
+#' @param url URL to properly escape
+#'
+#' @return escaped url
+encode_url_path <- function(url) {
+  parsed <- urltools::url_parse(url)
+  parsed$path <- urltools::url_encode(parsed$path)
+  urltools::url_parse(parsed)
 }

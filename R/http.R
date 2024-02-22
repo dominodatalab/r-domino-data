@@ -60,7 +60,6 @@ object_http <- function(verb = "GET",
 #' @details Internal only to enable retry for malformed URLs.
 #' @param verb A character string containing an HTTP verb
 #' @param url Signed URL to download object at.
-#' @param datasource_type Type of datasource the object is stored in.
 #' @param config A list of config values for the REST call.
 #' @param headers A list of request headers for the REST call.
 #' @param request_body A character string containing request body data.
